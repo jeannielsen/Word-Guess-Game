@@ -1,4 +1,4 @@
-//JavaScript Document
+
 
 //create reference to DOM elements
 var $newGameBtn = document.getElementById("new-game-button");
@@ -13,7 +13,7 @@ var $losses = document.getElementById("losses");
 var wordBank = ["seaweed", "dolphin", "lobster", "scallop", "snapper", "anemone", "halibut", "herring", "octopus", "sealion", "anchovy", "sealion", "codfish", "sardine", "tilapia"];
 var wins = 0;
 var losses = 0;
-var guessesLeft = 7;
+var guessesLeft = 8;
 var gameRunning = false;
 var pickedWord = " ";
 var pickedWordPlaceHolderArr = [];
@@ -24,24 +24,24 @@ var incorrectLetterBank = [];
 
 function newGame() {
     gameRunning = true;
-    guessesLeft = 7;
+    guessesLeft = 8;
     guessedLetterBank = [];
     incorrectLetterBank = [];
     pickedWordPlaceHolderArr = [];
 
 
-    // pick a word
+    // random word pick
 
     pickedWord = wordBank[Math.floor(Math.random() * wordBank.length)];
 
-    // make placeholder
+    // make placeholder for picked word
     for (var i = 0; i < pickedWord.length; i++) {
 
         if (pickedWord[i] === " ") {
             pickedWordPlaceHolderArr.push(" ");
         }
         else {
-            pickedWordPlaceHolderArr.push("_");
+            pickedWordPlaceHolderArr.push("_ ");
         }
     }
     //write game information to DOM
@@ -51,6 +51,7 @@ function newGame() {
     $guessedLetters.textContent = incorrectLetterBank;
 
 }
+// Write functions for letter guess, make all letters lower case, put in placeholder and compare picked picked letter to word
 
 function letterGuess(letter) {
     console.log(letter);
@@ -63,13 +64,14 @@ function letterGuess(letter) {
                 pickedWordPlaceHolderArr[i] = pickedWord[i];
             }
         }
-        console.log(pickedWordPlaceHolderArr)
-        $placeholders.textContent = pickedWordPlaceHolderArr.join("");
+        $placeholders.textContent = pickedWordPlaceHolderArr.join(" ");
         checkIncorrect(letter);
     }
 
+    // If game is not running alert to click start, alert if letter has already been guessed
+
     else {
-        if (!gameRunning) {
+        if (gameRunning === false) {
             alert("Click Start Game Button to start over");
         } else {
             alert("You've already guessed that letter, try again");
@@ -109,7 +111,7 @@ function checkWin() {
 }
 
 
-$newGameButton.addEventListener("click", newGame);
+$newGameBtn.addEventListener("click", newGame);
 
 document.onkeyup = function (event) {
     if (event.keyCode >= 65 && event.keyCode <= 90) {
