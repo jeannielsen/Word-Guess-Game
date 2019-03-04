@@ -24,10 +24,11 @@ var $placeholders = document.getElementById("placeholders");
 //new game function
 
 function newGame() {
+   
+    incorrectLetterBank = [];
+    guessedLetterBank = [];
     isGameRunning = true;
     triesLeft = 8;
-    guessedLetterBank = [];
-    incorrectLetterBank = [];
     choosenWordArr = [];
 
 
