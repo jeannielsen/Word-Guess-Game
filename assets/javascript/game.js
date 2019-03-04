@@ -1,77 +1,77 @@
 
 
-//create reference to DOM elements
-var $newGameBtn = document.getElementById("new-game-button");
-var $placeholders = document.getElementById("placeholders");
-var $guessedLetters = document.getElementById("guessed-letters");
-var $guessesLeft = document.getElementById("guesses-left");
-var $wins = document.getElementById("wins");
-var $losses = document.getElementById("losses");
 
 // create variables 
 
-var wordBank = ["seaweed", "dolphin", "lobster", "scallop", "snapper", "anemone", "halibut", "herring", "octopus", "sealion", "anchovy", "sealion", "codfish", "sardine", "tilapia"];
-var wins = 0;
-var losses = 0;
-var guessesLeft = 8;
-var gameRunning = false;
-var pickedWord = " ";
-var pickedWordPlaceHolderArr = [];
+var words = ["seaweed", "dolphin", "lobster", "scallop", "snapper", "anemone", "halibut", "herring", "octopus", "sealion", "anchovy", "sealion", "codfish", "sardine", "tilapia"];
+var choosenWordArr = [];
 var guessedLetterBank = [];
 var incorrectLetterBank = [];
+var wins = 0;
+var losses = 0;
+var triesLeft = 8;
+var isGameRunning = false;
+var choosenWord = " ";
 
+
+//create reference to DOM elements
+var $newGameButton = document.getElementById("new-game-button");
+var $wins = document.getElementById("wins");
+var $losses = document.getElementById("losses");
+var $guessedLetters = document.getElementById("guessed-letters");
+var $triesLeft = document.getElementById("guesses-left");
+var $placeholders = document.getElementById("placeholders");
 //new game function
 
 function newGame() {
-    gameRunning = true;
-    guessesLeft = 8;
+    isGameRunning = true;
+    triesLeft = 8;
     guessedLetterBank = [];
     incorrectLetterBank = [];
-    pickedWordPlaceHolderArr = [];
+    choosenWordArr = [];
 
 
     // random word pick
 
-    pickedWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+    choosenWord = words[Math.floor(Math.random() * words.length)];
 
     // make placeholder for picked word
-    for (var i = 0; i < pickedWord.length; i++) {
+    for (var i = 0; i < choosenWord.length; i++) {
 
-        if (pickedWord[i] === " ") {
-            pickedWordPlaceHolderArr.push(" ");
+        if (choosenWord[i] === " ") {
+            choosenWordArr.push(" ");
         }
         else {
-            pickedWordPlaceHolderArr.push("_ ");
+            choosenWordArr.push("_ ");
         }
     }
     //write game information to DOM
 
-    $guessesLeft.textContent = guessesLeft;
-    $placeholders.textContent = pickedWordPlaceHolderArr.join(" ");
+    $triesLeft.textContent = triesLeft;
+    $placeholders.textContent = choosenWordArr.join(" ");
     $guessedLetters.textContent = incorrectLetterBank;
 
 }
 // Write functions for letter guess, make all letters lower case, put in placeholder and compare picked picked letter to word
 
 function letterGuess(letter) {
-    console.log(letter);
 
-    if (gameRunning === true && guessedLetterBank.indexOf(letter) === -1) {
+    if (isGameRunning === true && guessedLetterBank.indexOf(letter) === -1) {
         guessedLetterBank.push(letter);
 
-        for (var i = 0; i < pickedWord.length; i++) {
-            if (pickedWord[i].toLowerCase() === letter.toLowerCase()) {
-                pickedWordPlaceHolderArr[i] = pickedWord[i];
+        for (var i = 0; i < choosenWord.length; i++) {
+            if (choosenWord[i].toLowerCase() === letter.toLowerCase()) {
+                choosenWordArr[i] = choosenWord[i];
             }
         }
-        $placeholders.textContent = pickedWordPlaceHolderArr.join(" ");
+        $placeholders.textContent = choosenWordArr.join(" ");
         checkIncorrect(letter);
     }
 
     // If game is not running alert to click start, alert if letter has already been guessed
 
     else {
-        if (gameRunning === false) {
+        if (isGameRunning === false) {
             alert("Click Start Game Button to start over");
         } else {
             alert("You've already guessed that letter, try again");
@@ -81,37 +81,37 @@ function letterGuess(letter) {
 
 function checkIncorrect(letter) {
     if (
-        pickedWordPlaceHolderArr.indexOf(letter.toLowerCase()) === -1 &&
-        pickedWordPlaceHolderArr.indexOf(letter.toUpperCase()) === -1) {
-        guessesLeft--;
+        choosenWordArr.indexOf(letter.toLowerCase()) === -1 &&
+        choosenWordArr.indexOf(letter.toUpperCase()) === -1) {
+        triesLeft--;
         incorrectLetterBank.push(letter);
         $guessedLetters.textContent = incorrectLetterBank.join(" ");
-        $guessesLeft.textContent = guessesLeft;
+        $triesLeft.textContent = triesLeft;
     }
     checkLoss();
 }
 
 function checkLoss() {
-    if (guessesLeft === 0) {
+    if (triesLeft === 0) {
         losses++;
-        gameRunning = false;
+        isGameRunning = false;
         $losses.textContent = losses;
-        $placeholders.textContent = pickedWord;
+        $placeholders.textContent = choosenWord;
     }
 
     checkWin();
 }
 
 function checkWin() {
-    if (pickedWord.toLowerCase() === pickedWordPlaceHolderArr.join("").toLowerCase()) {
+    if (choosenWord.toLowerCase() === choosenWordArr.join("").toLowerCase()) {
         wins++;
-        gameRunning = false;
+        isGameRunning = false;
         $wins.textContent = wins;
     }
 }
 
 
-$newGameBtn.addEventListener("click", newGame);
+$newGameButton.addEventListener("click", newGame);
 
 document.onkeyup = function (event) {
     if (event.keyCode >= 65 && event.keyCode <= 90) {
